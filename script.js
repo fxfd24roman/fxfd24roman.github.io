@@ -5,10 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // console.log(w);
   // console.log(h);
   if (w>h) {
-    a = h - 4;
+    a = h - 10;
   }
   else {
-    a = w - 4;
+    a = w - 10;
   }
   console.log(a);
   // Функция для воспроизведения звука и создания капли

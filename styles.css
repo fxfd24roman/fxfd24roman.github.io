@@ -1,0 +1,121 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #000000; /* Чисто черный фон */
+}
+
+.launchpad {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Центрирование пэдов по вертикали */
+  align-items: center; /* Центрирование пэдов по горизонтали */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-gap: 10px;
+}
+
+.pad {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  font-size: 24px;
+  color: #FFFFFF; /* Белый цвет текста */
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* Изменяем цвет фона кнопки в зависимости от data-color */
+.pad.pad1 { background-color: #FF5733; }
+.pad.pad2 { background-color: #FFC300; }
+.pad.pad3 { background-color: #33FF57; }
+.pad.pad4 { background-color: #33A2FF; }
+.pad.pad5 { background-color: #C933FF; }
+.pad.pad6 { background-color: #FF33C9; }
+.pad.pad7 { background-color: #E633FF; }
+.pad.pad8 { background-color: #B1FF33; }
+.pad.pad9 { background-color: #FF3362; }
+
+.pad.active {
+  /* Убираем анимацию масштабирования */
+  /* transform: scale(0.95); */
+}
+
+.drop-container {
+  position: fixed; /* Используем фиксированное позиционирование */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Занимаем всю ширину экрана */
+  height: 100vh; /* Занимаем всю высоту экрана */
+  pointer-events: none;
+  z-index: -1;
+}
+
+.drop {
+  /* Изменяем размеры круга на ваше усмотрение */
+  overflow: hidden;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  border: 4px solid;
+  opacity: 0.8;
+  animation: dropAnimation 0.5s ease-in-out;
+  pointer-events: none;
+  display: flex; /* Добавляем flex контейнер */
+  justify-content: center; /* Центрируем по горизонтали */
+  align-items: center; /* Центрируем по вертикали */
+  background-color: #000000; /* Черный цвет для заднего фона */
+  /* Позиционируем круг абсолютно относительно контейнера */
+  position: absolute;
+  /*top: 50%;
+  left: 50%;*/
+/*  transform: translate(-50%, -50%);*/
+  z-index: -1;
+}
+
+@keyframes dropAnimation {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* Стили для кнопок управления (добавлены в "Версии 2") */
+
+.controls button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CAF50; /* Зеленый цвет кнопки */
+  color: #FFFFFF; /* Белый цвет текста */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.controls button:hover {
+  background-color: #45a049; /* Темно-зеленый цвет кнопки при наведении */
+}
+
+.controls button:disabled {
+  background-color: #ccc; /* Серый цвет кнопки при отключенном состоянии */
+  cursor: not-allowed;
+}

@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="launchpad">
+  <div class="launchpad"> 
     <div class="grid">
       <button class="pad pad1" data-sound="sound1.mp3" data-color="#FF5733">1</button>
       <button class="pad pad2" data-sound="sound2.mp3" data-color="#FFC300">2</button>
@@ -19,7 +19,18 @@
       <button class="pad pad8" data-sound="sound8.mp3" data-color="#B1FF33">8</button>
       <button class="pad pad9" data-sound="sound9.mp3" data-color="#FF3362">9</button>
     </div>
+    <div class="timeline">
+      <div class="slider"></div>
+    </div>
     <div class="drop-container"></div>
+    <div class="controls">
+      <div class="freq-buttons">
+        <button class="freq-button freq-button1" data-bpm="3660" data-sound="among.mp3">Among US <img src="icons/10.png" style="width: 50px;"></button>
+        <button class="freq-button freq-button2" data-bpm="7440" data-sound="kapibara.mp3">Kapibara <img src="icons/11.png" style="width: 50px;"></button>
+        <button class="freq-button freq-button3" data-bpm="4560" data-sound="livsi.mp3">Livsi <img src="icons/12.png" style="width: 50px;"></button>
+      </div>
+      <button class="stop-button">STOP SONG</button>
+    </div>
   </div>
 
   <script src="script.js"></script>

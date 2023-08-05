@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Пример сайта с таблицей</title>
+  <!-- Подключаем стили Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-4">
+    <h2>Таблица с календарем</h2>
+    <div class="form-group row">
+      <div class="col-sm-8">
+        <input type="date" class="form-control" id="dateInput">
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-primary" onclick="addRow()">Добавить</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <textarea class="form-control" id="eventInput" placeholder="Введите текст" rows="3"></textarea>
+      <!-- <button class="btn btn-danger" onclick="deleteData()">Удалить</button> -->
+    </div>
+    <table class="table table-bordered mt-4">
+      <thead>
+        <tr>
+          <th scope="col">Дата</th>
+          <th scope="col">Событие</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <!-- В этот тег будут добавляться новые строки -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Подключаем скрипты Bootstrap и свой скрипт -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    function addRow() {
+      const dateInput = document.getElementById('dateInput');
+      const eventInput = document.getElementById('eventInput');
+      const date = dateInput.value;
+      const eventData = eventInput.value;
+
+      if (date !== '' && eventData !== '') {
+        const tableBody = document.getElementById('table-body');
+        const newRow = `
+          <tr>
+            <td>${date}</td>
+            <td><pre>${eventData}</pre> <button class="btn btn-danger btn-sm" onclick="deleteRow(this)">Удалить</button></td>
+          </tr>
+        `;
+        tableBody.insertAdjacentHTML('beforeend', newRow);
+        eventInput.value = '';
+      }
+    }
+
+    function deleteData() {
+      const eventInput = document.getElementById('eventInput');
+      eventInput.value = '';
+    }
+
+    function deleteRow(button) {
+      const row = button.parentElement.parentElement;
+      row.remove();
+    }
+  </script>
+</body>
+</html>

@@ -14,17 +14,20 @@
       </div>
       <div class="col-sm-4">
         <button class="btn btn-primary" onclick="addRow()">Добавить</button>
+        <button class="btn btn-success" onclick="loadToBot()">Загрузить в бота</button>
       </div>
     </div>
     <div class="form-group">
       <textarea class="form-control" id="eventInput" placeholder="Введите текст" rows="3"></textarea>
-      <!-- <button class="btn btn-danger" onclick="deleteData()">Удалить</button> -->
+      <button class="btn btn-danger" onclick="deleteData()">Удалить</button>
     </div>
     <table class="table table-bordered mt-4">
       <thead>
         <tr>
           <th scope="col">Дата</th>
           <th scope="col">Событие</th>
+          <th scope="col">Статус</th>
+          <th scope="col">Действие</th>
         </tr>
       </thead>
       <tbody id="table-body">
@@ -50,7 +53,9 @@
         const newRow = `
           <tr>
             <td>${date}</td>
-            <td><pre>${eventData}</pre> <button class="btn btn-danger btn-sm" onclick="deleteRow(this)">Удалить</button></td>
+            <td><pre>${eventData}</pre></td>
+            <td><span class="status-dot"></span></td>
+            <td><button class="btn btn-danger btn-sm" onclick="deleteRow(this)">Удалить</button></td>
           </tr>
         `;
         tableBody.insertAdjacentHTML('beforeend', newRow);
@@ -63,10 +68,33 @@
       eventInput.value = '';
     }
 
+    function loadToBot() {
+      // Здесь вы можете отправить данные на сервер и сохранить их в базу данных.
+      // Это требует настройки серверной части с использованием Python и базы данных SQLite.
+      // В этом примере мы просто меняем цвет точек на зеленый.
+      const statusDots = document.getElementsByClassName('status-dot');
+      for (const dot of statusDots) {
+        dot.classList.remove('bg-secondary');
+        dot.classList.add('bg-success');
+      }
+    }
+
     function deleteRow(button) {
       const row = button.parentElement.parentElement;
       row.remove();
     }
   </script>
+
+  <!-- Добавляем стили для точки -->
+  <style>
+    .status-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+      background-color: #888; /* серый цвет */
+    }
+  </style>
 </body>
 </html>

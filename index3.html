@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Расчет расстояния между адресами</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        label, input, button {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 1%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        /* Основные стили для кнопки */
+        button {
+            padding: 10px;
+            background-color: #ff00ff;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        /* Анимация загрузки */
+        #loadingAnimation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(45deg, transparent, #ff00ff, transparent);
+            opacity: 0;
+            transform: scaleX(0);
+            animation: loading 2s linear infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                transform: scaleX(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scaleX(1);
+                opacity: 0;
+            }
+        }
+
+        /* Анимация появления результата */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Стили для блока с результатом */
+        #resultBlock {
+            display: none;
+            background-color: rgba(255, 0, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 20px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+        }
+
+        #resultBlock p {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        #resultBlock:hover {
+            animation: neonBorder 1s infinite;
+        }
+
+        @keyframes neonBorder {
+            0%, 100% {
+                border: 2px solid #ff00ff;
+            }
+            50% {
+                border: 2px solid #ff99ff;
+            }
+        }
+
+        /* Эффект отскока для контейнера */
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Адаптивный текст */
+        h1, label, input, button {
+            font-size: 18px;
+        }
+
+        @media (min-width: 768px) {
+            h1, label, input, button {
+                font-size: 32px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            h1, label, input, button {
+                font-size: 34px;
+            }
+        }
+    </style>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=def012f9-0e57-4da2-8632-e61a4a2569d1&lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+    <div id="container" class="animated">
+        <h1>Расчет расстояния между адресами</h1>
+        <form id="distanceForm">
+            <label for="address1">Адрес 1:</label>
+            <input type="text" id="address1" required><br>
+            
+            <label for="address2">Адрес 2:</label>
+            <input type="text" id="address2" required><br>
+            
+            <button type="button" id="calculateButton">Рассчитать расстояние</button>
+        </form>
+        
+        <div id="loadingAnimation"></div>
+        
+        <div id="resultBlock"></div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const calculateButton = document.getElementById("calculateButton");
+            const resultBlock = document.getElementById("resultBlock");
+            // const loadingAnimation = document.getElementById("loadingAnimation");
+            
+            calculateButton.addEventListener("click", async function() {
+                // Показать анимацию загрузки
+                // loadingAnimation.style.opacity = "1";
+                // loadingAnimation.style.animation = "loading 2s linear forwards";
+
+                const address1 = document.getElementById("address1").value;
+                const address2 = document.getElementById("address2").value;
+                
+                if (address1 === "" || address2 === "") {
+                    resultBlock.innerHTML = "<p>Пожалуйста, введите оба адреса.</p>";
+                    resultBlock.style.display = "block";
+                    resultBlock.style.animation = "fadeIn 1s";
+                    return;
+                }
+                
+                try {
+                    const coordinates1 = await geocode(address1);
+                    const coordinates2 = await geocode(address2);
+                    
+                    const distance = calculateDistance(coordinates1, coordinates2);
+                    
+                    resultBlock.innerHTML = `<p>Расстояние между адресами: ${distance.toFixed(2)} км.</p>`;
+                    resultBlock.style.display = "block";
+                    resultBlock.style.animation = "fadeIn 1s";
+                } catch (error) {
+                    resultBlock.innerHTML = "<p>Ошибка при расчете расстояния.</p>";
+                    resultBlock.style.display = "block";
+                    resultBlock.style.animation = "fadeIn 1s";
+                    console.error(error);
+                } 
+            });
+            
+            async function geocode(address) {
+                const response = await ymaps.geocode(address);
+                const firstGeoObject = response.geoObjects.get(0);
+                return firstGeoObject.geometry.getCoordinates();
+            }
+            
+            function calculateDistance(coords1, coords2) {
+                const [lat1, lon1] = coords1;
+                const [lat2, lon2] = coords2;
+                const R = 6371; // радиус Земли в километрах
+                const dLat = toRad(lat2 - lat1);
+                const dLon = toRad(lon2 - lon1);
+                const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                          Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                const distance = R * c;
+                return distance;
+            }
+            
+            function toRad(degrees) {
+                return degrees * Math.PI / 180;
+            }
+        });
+    </script>
+</body>
+</html>
